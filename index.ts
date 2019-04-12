@@ -27,6 +27,7 @@ export interface Options {
 	files?: string[];
 	exclude?: string[];
 	externs?: string[];
+	declaredExternalModules?: string[];
 	types?: string[];
 	eol?: string;
 	includes?: string[];
@@ -334,6 +335,14 @@ export default function generate(options: Options): Promise<void> {
 				return null;
 			});
 		});
+
+		if (options.declaredExternalModules) {
+			options.declaredExternalModules.forEach(module => {
+				if (!declaredExternalModules.includes(module)) {
+					declaredExternalModules.push(module);
+				}
+			});
+		}
 
 		program.getSourceFiles().some(function (sourceFile) {
 			// Source file is a default library, or other dependency from another project, that should not be included in
